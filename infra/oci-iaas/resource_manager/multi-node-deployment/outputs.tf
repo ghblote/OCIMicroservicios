@@ -10,7 +10,7 @@ output "compartment_id" {
 }
 
 output "generated_instance_ssh_private_key" {
-  value = var.generate_ssh_key_pair ? module.compute.instance_keys.private_key_pem : ""
+  value     = var.generate_ssh_key_pair ? module.compute.instance_keys.private_key_pem : ""
   sensitive = true
 }
 
@@ -23,18 +23,18 @@ output "dbaas_private_ip" {
 }
 
 output "FQDN_database_SN" {
-  value =  module.network.subnet
+  value = module.network.subnet
 }
 
 output "dbaas_FQDN" {
-  value =  join(".", [module.compute.dbaas_display_name,module.network.subnet_domain_name])
+  value = join(".", [module.compute.dbaas_display_name, module.network.subnet_domain_name])
 }
 
-output "Database_Password"{
+output "Database_Password" {
   value = var.generate_app_db_passwords ? random_string.grabdish_database_password.result : var.grabdish_database_password
 }
 
-output "Grabdish_Application_Password"{
+output "Grabdish_Application_Password" {
   value = local.app_password
 }
 

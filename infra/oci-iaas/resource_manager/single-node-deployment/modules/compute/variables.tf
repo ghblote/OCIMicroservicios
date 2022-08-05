@@ -51,7 +51,7 @@ variable "common_tags" {
 
 variable "generate_app_db_passwords" {
   description = "Auto-generate Grabdish Application and Database Passwords"
-  type = string
+  type        = string
 }
 
 variable "grabdish_database_password" {

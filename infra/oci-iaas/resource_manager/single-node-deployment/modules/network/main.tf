@@ -5,7 +5,7 @@ locals {
   vcn_cidr_block    = "10.0.0.0/16"
   subnet_cidr_block = "10.0.1.0/24"
   all_cidr          = "0.0.0.0/0"
-  vcn_id = oci_core_vcn.this.id
+  vcn_id            = oci_core_vcn.this.id
 }
 
 # VCN

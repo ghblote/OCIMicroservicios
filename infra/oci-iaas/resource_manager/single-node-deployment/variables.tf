@@ -54,14 +54,14 @@ variable "generate_app_db_passwords" {
 variable "grabdish_database_password" {
   description = "grabdish_database_password"
   type        = string
-  default = "OraDB4U13579"
+  default     = "OraDB4U13579"
 
 }
 
 variable "grabdish_application_password" {
   description = "grabdish_application_password"
   type        = string
-  default = "Welcome12345"
+  default     = "Welcome12345"
 
 }
 

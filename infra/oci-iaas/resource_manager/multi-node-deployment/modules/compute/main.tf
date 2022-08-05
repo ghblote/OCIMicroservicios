@@ -5,11 +5,11 @@ locals {
   current_time                    = formatdate("YYYYMMDDhhmmss", timestamp())
   app_name                        = "grabdish-microsvc"
   app_compute_instance1_name      = "grabdish-compute1"
-  app_db_instance1_name          = "grabdish-database1"
+  app_db_instance1_name           = "grabdish-database1"
   display_name                    = join("-", [local.app_name, local.current_time])
   compartment_name                = data.oci_identity_compartment.this.name
-  grabdish_app_password   = var.grabdish_application_password
-  grabdish_db_password      = var.grabdish_database_password
+  grabdish_app_password           = var.grabdish_application_password
+  grabdish_db_password            = var.grabdish_database_password
   dynamic_group_tenancy_level     = "Allow dynamic-group ${oci_identity_dynamic_group.for_instance.name} to manage all-resources in tenancy"
   dynamic_group_compartment_level = "Allow dynamic-group ${oci_identity_dynamic_group.for_instance.name} to manage all-resources in compartment ${local.compartment_name}"
   num_of_ads                      = length(data.oci_identity_availability_domains.ads.availability_domains)
@@ -53,8 +53,8 @@ resource "oci_core_network_security_group_security_rule" "ingress_https" {
   stateless                 = false                                  # Optional
   tcp_options {                                                      # Optional
     destination_port_range {                                         # Optional
-      max = "443"                                                     # Required
-      min = "443"                                                     # Required
+      max = "443"                                                    # Required
+      min = "443"                                                    # Required
     }
   }
   description = "https only allowed" # Optional
@@ -85,8 +85,8 @@ resource "oci_core_network_security_group_security_rule" "ingress_sqlnet" {
   stateless                 = false                                  # Optional
   tcp_options {                                                      # Optional
     destination_port_range {                                         # Optional
-      max = "1521"                                                     # Required
-      min = "1521"                                                     # Required
+      max = "1521"                                                   # Required
+      min = "1521"                                                   # Required
     }
   }
   description = "sqlnet 1521 only allowed" # Optional
@@ -180,18 +180,18 @@ resource "oci_identity_policy" "dg_manage_all" {
 }
 
 resource "oci_core_instance" "dbaas_instance1" {
-  availability_domain = local.ads[0]
-  compartment_id = local.compartment_id
-  shape = var.instance_shape
+  availability_domain  = local.ads[0]
+  compartment_id       = local.compartment_id
+  shape                = var.instance_shape
   preserve_boot_volume = false
-  freeform_tags = var.common_tags
-  display_name = local.app_db_instance1_name
+  freeform_tags        = var.common_tags
+  display_name         = local.app_db_instance1_name
 
   create_vnic_details {
-    subnet_id = var.subnet_id
+    subnet_id        = var.subnet_id
     assign_public_ip = true
     nsg_ids = [
-      oci_core_network_security_group.nsg.id]
+    oci_core_network_security_group.nsg.id]
   }
 
   source_details {
@@ -202,27 +202,27 @@ resource "oci_core_instance" "dbaas_instance1" {
     #source_id = "ocid1.appcataloglisting.oc1..aaaaaaaan5rb524w7axx36ukn42l7fwzyzm3kodad7x5hxyeyz4nyy3yefgq" # Marketplace Image
     #source_id ="ocid1.image.oc1..aaaaaaaamotrq5ou4qjsnzw5sv7w2nbwvhhp4kjmazlxf23ozcsd66t3pw5q" #LiveLabs Converged DB
     #source_id ="ocid1.image.oc1.iad.aaaaaaaajv4k3wrfdrxwapmewcw37oxsroms3f7hmrk2mc7hepweiy3cbtja" #docker-db-21c-prega
-    source_id ="ocid1.image.oc1.iad.aaaaaaaabofqpxuzhkrqprbzvd6chq52chmwpqtjqgacl554nmj3acqpt6la" #single-node-deployment
+    source_id = "ocid1.image.oc1.iad.aaaaaaaabofqpxuzhkrqprbzvd6chq52chmwpqtjqgacl554nmj3acqpt6la" #single-node-deployment
 
     # DB-Base Image
   }
 
   metadata = {
-    ssh_authorized_keys = var.generate_ssh_key_pair ? tls_private_key.ssh_keypair.public_key_openssh : var.ssh_public_key
-    user_data           = base64encode(file("./modules/compute/scripts/bootstrap_database_docker.sh"))
-    tenancy_id = var.tenancy_ocid
+    ssh_authorized_keys           = var.generate_ssh_key_pair ? tls_private_key.ssh_keypair.public_key_openssh : var.ssh_public_key
+    user_data                     = base64encode(file("./modules/compute/scripts/bootstrap_database_docker.sh"))
+    tenancy_id                    = var.tenancy_ocid
     grabdish_application_password = var.grabdish_application_password
-    grabdish_database_password = var.grabdish_database_password
+    grabdish_database_password    = var.grabdish_database_password
     #app_public_repo = var.app_public_repo
     #iaas_public_repo = var.iaas_public_repo
     iaas_app_public_repo = var.iaas_app_public_repo
     #dbaas_FQDN =  var.dbaas_FQDN
-    target_compartment_id =var.target_compartment_id
-    vcn_id = var.vcn_id
-    subnet_id = var.subnet_id
-    image_os = var.image_os
-    image_os_version = var.image_os_version
-    instance_shape = var.instance_shape
+    target_compartment_id = var.target_compartment_id
+    vcn_id                = var.vcn_id
+    subnet_id             = var.subnet_id
+    image_os              = var.image_os
+    image_os_version      = var.image_os_version
+    instance_shape        = var.instance_shape
 
   }
 }
@@ -233,7 +233,7 @@ resource "oci_core_instance" "compute_instance1" {
   shape                = var.instance_shape
   preserve_boot_volume = false
   freeform_tags        = var.common_tags
-  display_name        = local.app_compute_instance1_name
+  display_name         = local.app_compute_instance1_name
 
 
   create_vnic_details {
@@ -259,21 +259,21 @@ resource "oci_core_instance" "compute_instance1" {
 
   }
   metadata = {
-    ssh_authorized_keys = var.generate_ssh_key_pair ? tls_private_key.ssh_keypair.public_key_openssh : var.ssh_public_key
-    user_data           = base64encode(file("./modules/compute/scripts/bootstrap_compute.sh"))
-    tenancy_id = var.tenancy_ocid
+    ssh_authorized_keys           = var.generate_ssh_key_pair ? tls_private_key.ssh_keypair.public_key_openssh : var.ssh_public_key
+    user_data                     = base64encode(file("./modules/compute/scripts/bootstrap_compute.sh"))
+    tenancy_id                    = var.tenancy_ocid
     grabdish_application_password = var.grabdish_application_password
-    grabdish_database_password = var.grabdish_database_password
+    grabdish_database_password    = var.grabdish_database_password
     #app_public_repo = var.app_public_repo
     #iaas_public_repo = var.iaas_public_repo
-    iaas_app_public_repo = var.iaas_app_public_repo
-    dbaas_FQDN =  var.dbaas_FQDN
-    target_compartment_id =var.target_compartment_id
-    vcn_id = var.vcn_id
-    subnet_id = var.subnet_id
-    image_os = var.image_os
-    image_os_version = var.image_os_version
-    instance_shape = var.instance_shape
+    iaas_app_public_repo  = var.iaas_app_public_repo
+    dbaas_FQDN            = var.dbaas_FQDN
+    target_compartment_id = var.target_compartment_id
+    vcn_id                = var.vcn_id
+    subnet_id             = var.subnet_id
+    image_os              = var.image_os
+    image_os_version      = var.image_os_version
+    instance_shape        = var.instance_shape
   }
 }
 

@@ -54,14 +54,14 @@ variable "generate_app_db_passwords" {
 variable "grabdish_database_password" {
   description = "grabdish_database_password"
   type        = string
-  default = "OraDB4U13579"
+  default     = "OraDB4U13579"
 
 }
 
 variable "grabdish_application_password" {
   description = "grabdish_application_password"
   type        = string
-  default = "Welcome12345"
+  default     = "Welcome12345"
 
 }
 
@@ -69,7 +69,7 @@ variable "iaas_public_repo" {
   description = "Repository URI to execute post provisioning infrastructure setup scripts"
   type        = string
   default     = "git clone -b master  --single-branch https://github.com/vishalmmehra/microservices-datadriven-infra/"
- #default = ""
+  #default = ""
 }
 
 variable "app_public_repo" {
